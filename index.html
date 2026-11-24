@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مسابقة المجلة الكيميائية</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800;900&family=Tajawal:wght@400;500;700&display=swap">
+<style>
+:root {
+  --bg: #0d0b2e;
+  --bg-2: #161350;
+  --surface: #1c1959;
+  --surface-2: #2a2679;
+  --line: #3f3a95;
+  --fg: #f4f1ff;
+  --muted: #b9b3e6;
+  --accent: #f5c24a;
+  --btn: #f5c24a;
+  --on-btn: #1a1440;
+  --teal: #3de0c5;
+  --good: #46e0a0;
+  --good-bg: rgba(70, 224, 160, 0.14);
+  --bad: #ff8aa0;
+  --bad-bg: rgba(255, 138, 160, 0.14);
+  --warn: #ff9f43;
+  --glow: rgba(124, 92, 255, 0.28);
+  --display: 'Cairo', system-ui, 'Segoe UI', Tahoma, sans-serif;
+  --body: 'Tajawal', system-ui, 'Segoe UI', Tahoma, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f5f3ff;
+    --bg-2: #e9e5ff;
+    --surface: #ffffff;
+    --surface-2: #ece8ff;
+    --line: #cdc6f2;
+    --fg: #1a1440;
+    --muted: #5b5590;
+    --accent: #8a5800;
+    --teal: #00826f;
+    --good: #0b7a52;
+    --good-bg: rgba(11, 122, 82, 0.1);
+    --bad: #b3243f;
+    --bad-bg: rgba(179, 36, 63, 0.08);
+    --warn: #b45309;
+    --glow: rgba(124, 92, 255, 0.14);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f5f3ff;
+  --bg-2: #e9e5ff;
+  --surface: #ffffff;
+  --surface-2: #ece8ff;
+  --line: #cdc6f2;
+  --fg: #1a1440;
+  --muted: #5b5590;
+  --accent: #8a5800;
+  --teal: #00826f;
+  --good: #0b7a52;
+  --good-bg: rgba(11, 122, 82, 0.1);
+  --bad: #b3243f;
+  --bad-bg: rgba(179, 36, 63, 0.08);
+  --warn: #b45309;
+  --glow: rgba(124, 92, 255, 0.14);
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  direction: rtl;
+  background: radial-gradient(900px 420px at 85% -8%, var(--glow), transparent 65%), var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.7;
+  padding-block: 1.5rem 3rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body.quiz-on::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 30;
+  background: var(--bg-2);
+}
+.wrap { max-width: 720px; margin-inline: auto; }
+h1, h2, p { margin: 0; }
+h1 {
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(2.1rem, 8vw, 3.4rem);
+  line-height: 1.25;
+  color: var(--accent);
+  text-wrap: balance;
+  margin-block: 0.4rem 0.5rem;
+}
+.eyebrow { font-size: 0.9rem; font-weight: 700; color: var(--teal); }
+.date-line { font-family: var(--display); font-weight: 800; font-size: 1.2rem; }
+.lead { color: var(--muted); max-width: 60ch; margin-top: 0.6rem; }
+
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-block: 1.5rem; }
+.tile {
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  background: var(--surface);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.tile .top { position: absolute; top: 0.35rem; inset-inline-start: 0.55rem; font-size: 0.78rem; font-weight: 700; color: var(--accent); }
+.tile .big { font-family: var(--display); font-weight: 900; font-size: clamp(2.4rem, 12vw, 3.6rem); line-height: 1; margin-top: 0.8rem; font-variant-numeric: tabular-nums; }
+.tile .lbl { font-size: 0.82rem; color: var(--muted); line-height: 1.3; text-wrap: balance; }
+
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1.1rem; }
+.field-label { display: block; font-weight: 700; margin-bottom: 0.4rem; }
+input[type="text"] {
+  width: 100%;
+  font: inherit;
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--fg);
+}
+input[type="text"]:focus-visible, .btn:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+.err { color: var(--bad); min-height: 1.6em; font-size: 0.95rem; margin-block: 0.3rem 0.5rem; }
+.btn {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  background: var(--btn);
+  color: var(--on-btn);
+  border: 0;
+  border-radius: 10px;
+  padding: 0.8rem 1.4rem;
+  cursor: pointer;
+}
+.btn:hover { filter: brightness(1.06); }
+.btn.block { width: 100%; }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; filter: none; }
+.gate { color: var(--warn); font-weight: 700; margin-block: 0 0.7rem; }
+.sources { color: var(--muted); font-size: 0.9rem; margin-top: 1rem; }
+
+.bar {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.55rem 0.9rem 0.65rem;
+  margin-bottom: 1rem;
+}
+.bar .row { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.bar .lab { display: block; font-size: 0.8rem; color: var(--muted); line-height: 1.3; }
+.bar .val { display: block; font-family: var(--display); font-weight: 800; font-size: 1.35rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.bar .end { text-align: end; }
+.timer { direction: ltr; unicode-bidi: isolate; text-align: right; }
+.bar.low .timer { color: var(--warn); }
+.bar.crit .timer { color: var(--bad); }
+.track { height: 4px; border-radius: 4px; background: var(--line); margin-top: 0.4rem; overflow: hidden; }
+.fill { height: 100%; width: 0; background: var(--teal); transition: width 0.2s; }
+
+.result { scroll-margin-top: 6rem; border: 2px solid var(--accent); background: var(--surface); border-radius: 14px; padding: 1.2rem; margin-bottom: 1.2rem; }
+.result .who { font-weight: 700; color: var(--muted); }
+.score { font-family: var(--display); font-weight: 900; font-size: clamp(3rem, 16vw, 4.6rem); line-height: 1.1; color: var(--accent); }
+.score small { font-size: 0.4em; color: var(--muted); font-weight: 700; }
+.verdict { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.8rem; }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.6rem; margin: 0; }
+.meta div { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 0.4rem 0.7rem; min-width: 0; }
+.meta dt { font-size: 0.8rem; color: var(--muted); }
+.meta dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.hint { color: var(--muted); font-size: 0.92rem; margin-top: 0.8rem; }
+
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1rem 1.1rem; margin: 0 0 1rem; min-width: 0; }
+.q-head { display: flex; align-items: baseline; gap: 0.6rem; margin-bottom: 0.2rem; }
+.q-n { font-family: var(--display); font-weight: 900; color: var(--accent); font-size: 1.4rem; line-height: 1.2; }
+.q-tag { font-size: 0.82rem; color: var(--teal); font-weight: 700; }
+.q-text { font-weight: 700; font-size: 1.1rem; margin-block: 0.1rem 0.8rem; text-wrap: pretty; }
+.opts { display: grid; gap: 0.55rem; }
+.opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 48px;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.opt:has(input:focus-visible) { outline: 3px solid var(--teal); outline-offset: 2px; }
+.opt .mark {
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  display: grid;
+  place-items: center;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.opt .txt { flex: 1; min-width: 0; }
+.opt.sel { border-color: var(--btn); background: var(--surface-2); }
+.opt.sel .mark { background: var(--btn); border-color: var(--btn); color: var(--on-btn); }
+.locked .opt { cursor: default; }
+.locked .opt input { cursor: default; }
+.opt.correct { border-color: var(--good); background: var(--good-bg); }
+.opt.correct .mark { background: var(--good); border-color: var(--good); color: var(--bg); }
+.opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.opt.wrong .mark { background: var(--bad); border-color: var(--bad); color: var(--bg); }
+.flag { flex: none; font-size: 0.8rem; font-weight: 700; padding: 0.05rem 0.6rem; border-radius: 999px; border: 1px solid currentColor; }
+.opt.correct .flag { color: var(--good); }
+.opt.wrong .flag { color: var(--bad); }
+.skip { color: var(--warn); font-weight: 700; font-size: 0.95rem; margin-top: 0.6rem; }
+
+.submit-row { display: grid; gap: 0.5rem; margin-top: 0.5rem; }
+.note { color: var(--muted); min-height: 1.6em; font-size: 0.95rem; }
+footer { color: var(--muted); font-size: 0.85rem; text-align: center; margin-top: 2rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<main class="wrap" dir="rtl" lang="ar">
+  <section id="intro">
+    <p class="eyebrow">المجلة الإلكترونية الكيميائية · العدد الأول</p>
+    <h1>مسابقة العدد الأول</h1>
+    <p class="date-line">الثلاثاء 24/11/2026</p>
+    <p class="lead">عشرة أسئلة من صفحات المجلة. لكل سؤال علامة واحدة، ويبدأ احتساب الوقت عندما تضغطين «ابدئي».</p>
+
+    <div class="tiles">
+      <div class="tile"><span class="top">2026</span><span class="big">24</span><span class="lbl">نوفمبر · الثلاثاء</span></div>
+      <div class="tile"><span class="top">المدة</span><span class="big">10</span><span class="lbl">دقيقة</span></div>
+      <div class="tile"><span class="top">الأسئلة</span><span class="big">10</span><span class="lbl">علامة لكل سؤال</span></div>
+    </div>
+
+    <div class="panel">
+      <label class="field-label" for="name">اسم الطالبة</label>
+      <input type="text" id="name" autocomplete="name" placeholder="اكتبي اسمك الكامل">
+      <p class="err" id="err" role="alert"></p>
+      <p class="gate" id="gate" role="status" hidden></p>
+      <button type="button" class="btn block" id="start">ابدئي المسابقة</button>
+    </div>
+    <p class="sources">الأسئلة من أقسام رواد الكيمياء وكيمياء المطبخ والتجارب الممتعة واللومينول.</p>
+  </section>
+
+  <section id="quiz" hidden>
+    <div class="bar" id="bar">
+      <div class="row">
+        <div><span class="lab">الوقت المتبقي</span><span class="val timer" id="timer">10:00</span></div>
+        <div class="end"><span class="lab">أسئلة مُجابة</span><span class="val"><span id="answered">0</span> من 10</span></div>
+      </div>
+      <div class="track"><div class="fill" id="fill"></div></div>
+    </div>
+
+    <div class="result" id="result" hidden tabindex="-1"></div>
+
+    <form id="qs" onsubmit="return false"></form>
+
+    <div class="submit-row" id="submitRow">
+      <p class="note" id="note" role="status"></p>
+      <button type="button" class="btn block" id="submit">سلّمي المسابقة</button>
+    </div>
+  </section>
+
+  <footer>المجلة الإلكترونية الكيميائية · العدد الأول</footer>
+</main>
+
+<script>
+(function () {
+  var DURATION = 10 * 60 * 1000;
+  var LETTERS = ['أ', 'ب', 'ج'];
+  var DATE_TEXT = '24/11/2026';
+  var Q = [
+    { tag: 'رواد الكيمياء', q: 'من صاحب قانون حفظ الكتلة، ويُلقّب بـ«أبو الكيمياء الحديثة»؟', o: ['دالتون', 'لافوازييه', 'مندليف'], a: 1 },
+    { tag: 'رواد الكيمياء', q: 'من أول شخص يفوز بجائزة نوبل في مجالين علميين مختلفين؟', o: ['ماري كوري', 'أحمد زويل', 'الرازي'], a: 0 },
+    { tag: 'الجدول الدوري', q: 'ما العنصر الذي تنبأ مندليف بخواصه قبل اكتشافه عام 1886؟', o: ['الراديوم', 'الجرمانيوم', 'الزئبق'], a: 1 },
+    { tag: 'رواد الكيمياء', q: 'في أي مجال اشتهر أحمد زويل ونال عنه نوبل عام 1999؟', o: ['الأسمدة', 'البتروكيماويات', 'كيمياء الفمتو'], a: 2 },
+    { tag: 'رواد الكيمياء', q: 'أي مصطلح كيميائي إنجليزي أصله عربي؟', o: ['Alkali', 'Oxygen', 'Atom'], a: 0 },
+    { tag: 'رواد الكيمياء', q: 'من الشخص الوحيد الذي نال نوبل في الكيمياء ثم نوبل للسلام (غير مشتركتين)؟', o: ['دالتون', 'لافوازييه', 'بولينغ'], a: 2 },
+    { tag: 'كيمياء المطبخ', q: 'ما سبب البكاء عند تقطيع البصل؟', o: ['مادة متطايرة تحتوي على الكبريت تصل إلى العين', 'غاز الأكسجين', 'حمض الليمون'], a: 0 },
+    { tag: 'تجارب ممتعة', q: 'ماذا يحتوي الملفوف الأحمر ليتغير لونه بحسب درجة الحموضة؟', o: ['الكلوروفيل', 'الأنثوسيانين', 'الكحول'], a: 1 },
+    { tag: 'اللومينول', q: 'ما اللون الذي يظهر عند تفاعل اللومينول، وفي أي مجال يُستخدم؟', o: ['أحمر، في الطب', 'أخضر، في الزراعة', 'أزرق، في الكشف عن آثار الدم'], a: 2 },
+    { tag: 'كيمياء المطبخ', q: 'أي تفاعل مسؤول عن اللون الذهبي للخبز ونكهة القهوة المحمصة؟', o: ['تفاعل ميلارد', 'الاحتراق', 'التبخر'], a: 0 }
+  ];
+
+  function $(id) { return document.getElementById(id); }
+  var qs = $('qs');
+  var studentName = '', startedAt = 0, deadline = 0, timerId = null;
+  var finished = false, armed = false;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  qs.innerHTML = Q.map(function (it, i) {
+    return '<div class="q" id="q' + i + '">' +
+      '<div class="q-head"><span class="q-n">' + (i + 1) + '</span><span class="q-tag">' + it.tag + '</span></div>' +
+      '<p class="q-text" id="qt' + i + '">' + it.q + '</p>' +
+      '<div class="opts" role="radiogroup" aria-labelledby="qt' + i + '">' +
+      it.o.map(function (t, j) {
+        return '<label class="opt"><input type="radio" name="q' + i + '" value="' + j + '">' +
+          '<span class="mark">' + LETTERS[j] + '</span><span class="txt">' + t + '</span></label>';
+      }).join('') +
+      '</div><p class="skip" hidden>لم تجيبي عن هذا السؤال.</p></div>';
+  }).join('');
+
+  function pa
